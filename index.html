@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>REST Countries Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="rest_styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="theme-toggle-container">
+      <span class="theme-label" id="labelLight">Light</span>
+      
+      <label class="theme-switch" for="themeToggleBtn">
+        <input type="checkbox" id="themeToggleBtn" />
+        <div class="slider">
+          <div class="knob">
+            <svg class="icon-knob icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="icon-knob icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </div>
+          
+          <div class="decoration light-decor">
+            <span></span><span></span>
+          </div>
+          <div class="decoration dark-decor">
+            <span></span><span></span>
+          </div>
+        </div>
+      </label>
+      
+      <span class="theme-label" id="labelDark">Dark</span>
+    </div>
+    
+    <h1>REST Countries Explorer</h1>
+    <p>View and search countries by name, code, continent, and capital</p>
+  </header>
+
+  <main class="app-main">
+    <section class="search-section">
+      <div class="search-controls">
+        <label for="searchType">Search by:</label>
+        <select id="searchType">
+          <option value="name">Name</option>
+          <option value="code">Country Code</option>
+          <option value="continent">Continent (Region)</option>
+          <option value="capital">Capital</option>
+        </select>
+      </div>
+
+      <div class="search-input-wrapper">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Type to search..."
+        />
+        <button id="clearBtn">Clear</button>
+      </div>
+
+      <p class="status" id="statusText">Loading countries...</p>
+    </section>
+
+    <section class="countries-section">
+      <div id="countriesContainer" class="countries-grid">
+        </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <small>
+      Data from
+      <a href="https://restcountries.com/" target="_blank" rel="noopener">
+        REST Countries API
+      </a>
+    </small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

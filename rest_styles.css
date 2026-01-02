@@ -1,0 +1,582 @@
+
+:root {
+  /* DEFAULT DARK THEME */
+  --bg-body: #0f172a;
+  --bg-header: radial-gradient(circle at top, #1e3a8a, #020617);
+  --bg-card: rgba(15, 23, 42, 0.6);
+  --bg-card-hover: rgba(30, 41, 59, 0.8);
+  --bg-search: rgba(15, 23, 42, 0.8);
+  --bg-input: #1e293b;
+  --bg-modal-overlay: rgba(2, 6, 23, 0.85);
+  --bg-modal-content: #1e293b;
+  --bg-footer: #020617;
+
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-header: #f8fafc;
+  --text-accent: #38bdf8;
+  
+  --border-color: rgba(51, 65, 85, 0.8);
+  --border-input: #334155;
+  
+  --shadow-header: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* LIGHT THEME OVERRIDES */
+body.light-mode {
+  --bg-body: #f8fafc;
+  --bg-header: radial-gradient(circle at top, #bfdbfe, #eff6ff);
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-search: rgba(255, 255, 255, 0.9);
+  --bg-input: #ffffff;
+  --bg-modal-overlay: rgba(255, 255, 255, 0.6);
+  --bg-modal-content: #ffffff;
+  --bg-footer: #e2e8f0;
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-header: #1e3a8a;
+  --text-accent: #d97706;
+
+  --border-color: #e2e8f0;
+  --border-input: #cbd5e1;
+  
+  --shadow-header: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Basic reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg-body);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Header */
+.app-header {
+  position: relative;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  background: var(--bg-header);
+  color: var(--text-header);
+  box-shadow: var(--shadow-header);
+  transition: background 0.3s ease;
+}
+
+.app-header h1 {
+  font-size: 1.9rem;
+  margin: 1.5rem 0 0.3rem 0;
+  color: var(--text-header);
+}
+
+.app-header p {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  color: var(--text-header);
+}
+
+/* Enhanced Toggle (Icons + Stars + Colors) */
+
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  z-index: 10;
+}
+
+.theme-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  user-select: none;
+}
+
+/* Label Colors based on active mode */
+/* Dark Mode Active (Default state) */
+body:not(.light-mode) .theme-label#labelDark {
+  color: #ffffff;
+  opacity: 1;
+  text-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+body:not(.light-mode) .theme-label#labelLight {
+  color: rgba(255, 255, 255, 0.4);
+  opacity: 0.6;
+}
+
+/* Light Mode Active */
+body.light-mode .theme-label#labelLight {
+  color: #1e40af; /* Strong Blue */
+  opacity: 1;
+}
+body.light-mode .theme-label#labelDark {
+  color: rgba(30, 64, 175, 0.4);
+  opacity: 0.6;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 64px;
+  height: 34px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The Background Pill */
+.slider {
+  position: absolute;
+  inset: 0;
+  background-color: #4f46e5; /* Deep Indigo (Dark Mode) */
+  transition: background-color 0.4s ease;
+  border-radius: 34px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Light Mode Background (Unchecked) */
+input:not(:checked) + .slider {
+  background-color: #60a5fa; /* Sky Blue */
+}
+
+/* The Knob */
+.knob {
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.7, 1);
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Move Knob for Dark Mode (Checked) */
+input:checked + .slider .knob {
+  transform: translateX(30px);
+}
+
+/* Knob Icons (Sun/Moon) */
+.icon-knob {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  transition: opacity 0.3s ease, transform 0.4s ease;
+}
+
+/* Sun Icon Logic */
+.icon-sun {
+  color: #fbbf24; /* Amber/Gold */
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
+}
+
+/* Moon Icon Logic */
+.icon-moon {
+  color: #4f46e5; /* Indigo */
+  opacity: 1;
+  transform: scale(1) rotate(0);
+}
+
+/* When Unchecked (Light Mode) -> Show Sun */
+input:not(:checked) + .slider .knob .icon-sun {
+  opacity: 1;
+  transform: scale(1) rotate(0);
+}
+
+input:not(:checked) + .slider .knob .icon-moon {
+  opacity: 0;
+  transform: scale(0.5) rotate(90deg);
+}
+
+/* Decorations (Stars/Clouds) */
+.decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.decoration span {
+  position: absolute;
+  background: white;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* -- CLOUDS (Light Mode) -- */
+/* Circles appearing on the right side */
+.light-decor span {
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.light-decor span:nth-child(1) {
+  width: 6px;
+  height: 6px;
+  top: 10px;
+  right: 15px;
+}
+.light-decor span:nth-child(2) {
+  width: 4px;
+  height: 4px;
+  top: 19px;
+  right: 10px;
+}
+
+/* Show Clouds in Light Mode (Unchecked) */
+input:not(:checked) + .slider .light-decor span {
+  opacity: 0.9;
+  transform: scale(1);
+  transition-delay: 0.1s;
+}
+
+/* -- STARS (Dark Mode) -- */
+/* Stars appearing on the left side */
+.dark-decor span {
+  background-color: white;
+  /* Clip-path makes them 5-point stars */
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.dark-decor span:nth-child(1) {
+  width: 9px;
+  height: 9px;
+  top: 9px;
+  left: 12px;
+}
+.dark-decor span:nth-child(2) {
+  width: 6px;
+  height: 6px;
+  top: 20px;
+  left: 20px;
+}
+
+/* Hide Stars in Light Mode (Unchecked) */
+input:not(:checked) + .slider .dark-decor span {
+  opacity: 0;
+  transform: scale(0) rotate(-45deg);
+  transition-delay: 0s;
+}
+
+/* =========================================
+   Main Layout & Components
+   ========================================= */
+.app-main {
+  flex: 1;
+  padding: 1rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Search area */
+.search-section {
+  margin-bottom: 1rem;
+  background: var(--bg-search);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(8px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.search-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.search-controls label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+#searchType {
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+  color: var(--text-main);
+  outline: none;
+}
+
+#searchType:focus {
+  border-color: #22c55e;
+}
+
+.search-input-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#searchInput {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-input);
+  background: var(--bg-input);
+  color: var(--text-main);
+  outline: none;
+}
+
+#searchInput::placeholder {
+  color: var(--text-muted);
+}
+
+#searchInput:focus {
+  border-color: #22c55e;
+}
+
+#clearBtn {
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: #ef4444;
+  color: #f9fafb;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s;
+}
+
+#clearBtn:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.status {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Country grid */
+.countries-section {
+  margin-top: 0.5rem;
+}
+
+.countries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* Country card */
+.country-card {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.3s ease;
+}
+
+.country-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+  border-color: #38bdf8; /* Highlight color matches accent */
+  background: var(--bg-card-hover);
+}
+
+.country-flag-wrapper {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.country-flag {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.country-body {
+  padding: 0.75rem 0.9rem 0.9rem;
+}
+
+.country-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--text-main);
+}
+
+.country-meta {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.country-meta span {
+  display: block;
+}
+
+.country-meta strong {
+  color: var(--text-main);
+}
+
+/* Footer */
+.app-footer {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-footer);
+  transition: background 0.3s ease;
+}
+
+.app-footer a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Modal styles */
+.country-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1002;
+  background: var(--bg-modal-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, background 0.3s;
+  backdrop-filter: blur(2px);
+}
+.country-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.country-modal-content {
+  background: var(--bg-modal-content);
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  max-width: 420px;
+  width: 95vw;
+  position: relative;
+  color: var(--text-main);
+  animation: modalIn 0.22s cubic-bezier(.4,2,.6,1) both;
+  transition: background 0.3s, color 0.3s;
+}
+@keyframes modalIn {
+  from { transform: translateY(40px) scale(0.97); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.country-modal-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 1.1rem;
+  background: none;
+  border: none;
+  color: #f87171;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.15s;
+}
+.country-modal-close:hover {
+  color: #ef4444;
+}
+.country-modal-body {
+  margin-top: 0.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.country-modal-meta p, .country-modal-extra p {
+  margin: 0.3em 0;
+  font-size: 1rem;
+  color: var(--text-main);
+}
+.country-modal-meta strong, .country-modal-extra strong {
+  color: var(--text-accent);
+}
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .app-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4rem; 
+  }
+  
+  .theme-toggle-container {
+    top: 1rem;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .app-header h1 {
+    font-size: 1.4rem;
+    margin-top: 0;
+  }
+}
+
+/* Smudged flag overlay shown after long hover */
+#flagOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  background-position: center;
+  background-size: cover;
+  filter: blur(10px) saturate(2.5) brightness(0.8);
+  transform: scale(1.03);
+  mix-blend-mode: normal;
+}
+
+#flagOverlay.active {
+  opacity: 0.46;
+}
+
+.app-header, .app-main, .app-footer {
+  position: relative;
+  z-index: 1;
+}
