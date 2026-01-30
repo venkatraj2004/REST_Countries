@@ -1,4 +1,5 @@
 // Using REST Countries API (v3)
+
 const API_URL =
   "https://restcountries.com/v3.1/all?fields=name,cca2,cca3,capital,region,flags,population";
 
@@ -111,7 +112,7 @@ function renderCountries(list) {
     card.className = "country-card";
     card.tabIndex = 0;
 
-    const flagUrl = country.flags?.png || country.flags?.svg || "";
+    const flagUrl = country.flags?.svg || "";
     const name = country.name?.common || "Unknown";
     const officialName = country.name?.official || "";
     const capital = country.capital?.[0] || "N/A";
@@ -295,11 +296,28 @@ clearBtn.addEventListener("click", () => {
   searchInput.focus();
 });
 
+// Detect browser / OS theme
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+const osTheme = prefersDark ? "dark" : "light";
+
+// Detect if this is a fresh load (tab closed & reopened)
+const isFreshLoad = !sessionStorage.getItem("pageLoaded");
+
+// If fresh load → initialize localStorage from OS theme
+if (isFreshLoad) {
+  localStorage.setItem("theme", osTheme);
+}
+
+// Mark page as loaded (persists across reloads, cleared on tab close)
+sessionStorage.setItem("pageLoaded", "true");
+
+
 /*Light/Dark Mode Toggle Logic*/
 const themeToggleBtn = document.getElementById("themeToggleBtn");
 
 // Check for saved preference
 const currentTheme = localStorage.getItem("theme");
+console.log(currentTheme);
 if (currentTheme === "light") {
   document.body.classList.add("light-mode");
   themeToggleBtn.checked = false; // Unchecked for light mode
